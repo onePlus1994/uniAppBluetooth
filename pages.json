@@ -1,0 +1,68 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index", //首页
+			"style": {
+				"navigationBarTitleText": "蓝牙链接",
+				"app-plus": {
+					"titleNView": false,
+					"bounce": "none" //关闭窗口回弹效果
+				}
+				
+			}
+		}, {
+			"path": "pages/log/log", //日志页面
+			"style": {
+				"navigationBarTitleText": "日志"
+			}
+		}, {
+			"path": "pages/detail/detail", //详情页面
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
+		}, {
+			"path": "pages/router/bluetooth", //添加蓝牙设备
+			"style": {
+				"navigationBarTitleText": "添加设备",
+				"app-plus": {
+					// "titleNView": false,
+					"enablePullDownRefresh": true
+				}
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {}   
+	// "tabBar": {
+	// 	//tab 上的文字默认颜色
+	// 	"color" : "#0000ff",
+	// 	//tab 上的文字选中时的颜色
+	// 	"selectedColor" : "#DD524D",
+	// 	//tab 的背景色
+	// 	"backgroundColor" : "#F8F8FF",
+	// 	//	tabbar 上边框的颜色，仅支持 black/white
+	// 	"borderStyle" : "white",
+	// 	//可选值 bottom、top .top 值仅微信小程序支持
+	// 	"position": "top",
+	// 	"list": [{
+	// 			"text": "蓝牙链接",
+	// 			"pagePath": "pages/index/index",
+	// 			"iconPath": "static/logo.png"
+	// 		},{
+	// 			"text": "日志",
+	// 			"pagePath": "pages/log/log",
+	// 			"iconPath": "static/logo.png"
+	// 		},{
+	// 			"text": "详情",
+	// 			"pagePath": "pages/detail/detail",
+	// 			"iconPath": "static/logo.png"
+	// 			// "selectedIconPath": "static/tabs/contact-active.png"
+	// 		}
+	// 	]
+	// }
+}

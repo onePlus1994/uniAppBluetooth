@@ -1,0 +1,9 @@
+{
+    "id": "ive-pull-refresh",
+    "name": "ive-pull-refresh",
+    "version": "0.1.7",
+    "description": "局部下拉刷新、触底加载",
+    "keywords": [
+        "轻松实现局部下拉刷新、触底加载"
+    ]
+}
