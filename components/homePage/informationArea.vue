@@ -6,9 +6,6 @@
 				{{item.name}}: {{ initialization(item.id) }}
 			</text>
 		</view>
-		<view class="textR">
-			<button class="mini-btn" type="primary" size="mini">电池使用记录</button>
-		</view>
 		<view class="radiusStyle">
 			<view :class="[flagStartStop ? 'blue' : 'green', 'radiuBut']" @click="radiuBut()">
 				<text>{{ flagStartStop ? "启动" : "停止" }}</text>
@@ -44,7 +41,7 @@
 					{ name: "IR灯", id: "IR" },
 					{ name: "主板温度", id: "T1" },
 					{ name: "灯板温度", id: "T2" },
-					{ name: "电池电压", id: "BA" }
+					// { name: "电池电压", id: "BA" }
 				],
 				clickBut:[
 					{ name: "短按K1", val: "" },
@@ -137,14 +134,17 @@
 		margin: 10px 0;
 	}
 	.othrText{
-		width: 80px;
 		margin-right: 10px;
 	}
 	.otBuS{
 		background-color: #C0C0C0;
+		color: #191919;
+	}
+	.otBuS:active{
+		background-color: #F0F8FF;
 	}
 	.editionTex{
-		width: 100px;
+		width: 130px;
 		font-size: 14px;
 		color: #808080;
 		line-height: 35px;

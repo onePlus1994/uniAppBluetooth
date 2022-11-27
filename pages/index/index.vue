@@ -6,14 +6,14 @@
 		<!-- 蓝牙断开界面 -->
 		<!-- <homePage></homePage> -->
 		<!-- 蓝牙功能区 -->
-		<view>
+		<view class="countMain">
 			<commandIssuing></commandIssuing>
 			<informationArea></informationArea>
 		</view>
 	</view>
 </template>
 <script>
-	import homeHeader from '../../components/homePage/homeHeader.vue';
+	import homeHeader from '../../components/headPage/homeHeader.vue';
 	import homePage from '../../components/homePage/homePage.vue';
 	import commandIssuing from '../../components/homePage/commandIssuing.vue';
 	import informationArea from '../../components/homePage/informationArea.vue';

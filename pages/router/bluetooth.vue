@@ -1,5 +1,6 @@
 <template>
 	<view >
+		<publicHeader :title="title"></publicHeader>
 		<view v-for="item in showList" class="titleClass">
 			<view class="titleIcon">
 				<uni-icons custom-prefix="iconfont" type="icon-lanya" size="30"></uni-icons>
@@ -16,9 +17,14 @@
 </template>
 
 <script>
+	import publicHeader from '../../components/headPage/publicHeader.vue';
 	export default {
+		components:{
+			publicHeader
+		},
 		data() {
 			return {
+				title: "添加设备",
 				showList: [], //搜寻到的数据
 				datastr: "",
 				flagSub: "",

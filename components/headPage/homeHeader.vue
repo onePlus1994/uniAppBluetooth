@@ -1,6 +1,6 @@
 <template>
-	<view >
-		<view class="navBarClass">
+	<view  class="navBarClass headPadding">
+		<view>
 			<uni-nav-bar backgroundColor="#F8F8F8">
 				<view slot="left">
 					<uni-icons type="list" size="30" @click="openRecord()"></uni-icons>
@@ -22,10 +22,9 @@
 	</view>
 </template>
 <script>
-	import homePage from './homePage.vue';
 	export default {
 		components:{
-			homePage
+			
 		},
 		data() {
 			return {
@@ -50,11 +49,15 @@
 
 <style>
 	.navBarClass{
-		padding-top: 22px;
-		background-color: #F8F8F8;
+		background: #00BFFF;
+		position: fixed;
+		width: 100%;
 	}
 	.defStyle{
 		width: 100%;
-		text-align: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 </style>
