@@ -9,6 +9,7 @@
 		<view class="countMain">
 			<commandIssuing></commandIssuing>
 			<informationArea></informationArea>
+			<popUpBluetooth></popUpBluetooth>
 		</view>
 	</view>
 </template>
@@ -17,12 +18,14 @@
 	import homePage from '../../components/homePage/homePage.vue';
 	import commandIssuing from '../../components/homePage/commandIssuing.vue';
 	import informationArea from '../../components/homePage/informationArea.vue';
+	import popUpBluetooth from '../router/popUpBluetooth.vue';
 	export default {
 		components:{
 			homeHeader,
 			homePage,
 			commandIssuing,
-			informationArea
+			informationArea,
+			popUpBluetooth
 		},
 		data() {
 			return {
@@ -40,6 +43,6 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 
 </style>

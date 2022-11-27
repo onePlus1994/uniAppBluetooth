@@ -3,7 +3,7 @@
 		<view>
 			<uni-nav-bar backgroundColor="#F8F8F8">
 				<view slot="left">
-					<uni-icons type="list" size="30" @click="openRecord()"></uni-icons>
+					<uni-icons type="list" size="30" @click="openPopUpBluetooth()"></uni-icons>
 				</view>
 				<view class="defStyle">
 					<view class="fontTit">{{ domain.equipmentName }}</view>
@@ -14,11 +14,6 @@
 				</view>
 			</uni-nav-bar>
 		</view>
-		<uni-popup ref="popup" background-color="#fff" type="left">
-			<view class="popup-content">
-				<text class="text">popup 内容</text>
-			</view>
-		</uni-popup>
 	</view>
 </template>
 <script>
@@ -35,8 +30,8 @@
 		
 		},
 		methods: {
-			openRecord(){
-				this.$refs.popup.open();
+			openPopUpBluetooth(){
+				uni.$emit('openPopUpBluetooth')
 			},
 			openBlue(){
 				uni.navigateTo({
@@ -47,7 +42,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.navBarClass{
 		background: #00BFFF;
 		position: fixed;

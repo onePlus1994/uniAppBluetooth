@@ -47,7 +47,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.navBarClass{
 		background: #00BFFF;
 		position: fixed;

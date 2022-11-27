@@ -30,7 +30,7 @@
 		}
     }
 </script>
-<style>
+<style lang="scss">
 	.centerStyle{
 		display: flex;
 		align-items: center;

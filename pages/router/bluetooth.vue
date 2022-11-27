@@ -1,7 +1,7 @@
 <template>
 	<view >
 		<publicHeader :title="title"></publicHeader>
-		<view v-for="item in showList" class="titleClass">
+		<view v-for="item in showList" class="titleClass countMain">
 			<view class="titleIcon">
 				<uni-icons custom-prefix="iconfont" type="icon-lanya" size="30"></uni-icons>
 			</view>
@@ -283,7 +283,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.titleClass{
 		display: flex;
 		flex-direction: row;

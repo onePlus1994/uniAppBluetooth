@@ -103,7 +103,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.titPattern{
 		width: 100%;
 		height: 80px;

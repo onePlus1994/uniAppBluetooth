@@ -59,7 +59,6 @@
 	    },
 		mounted(){
 			const that = this
-			uni.$off("globalData");
 			uni.$on("globalData",function(i){
 				that.numPage += 1
 			})
@@ -86,7 +85,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.allSt{
 		background-color: #F5F5F5;
 		padding: 20px;
