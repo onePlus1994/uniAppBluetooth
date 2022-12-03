@@ -12,3 +12,10 @@
 .countMain{
 	padding-top: 88px;
 }
+uni-button{
+	position: inherit;
+}
+uni-button:after{
+	border: none;
+	position: inherit;
+}

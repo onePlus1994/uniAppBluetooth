@@ -14,24 +14,50 @@
 				</view>
 			</uni-nav-bar>
 		</view>
+		<view>
+			<uni-popup ref="popup" background-color="#fff" type="left">
+				<view class="allSty">
+					<popUpBluetooth :windowHeight="windowHeight"></popUpBluetooth>
+				</view>
+			</uni-popup>
+		</view>
 	</view>
 </template>
 <script>
+	import popUpBluetooth from '../../pages/router/popUpBluetooth.vue';
 	export default {
 		components:{
-			
+			popUpBluetooth
 		},
 		data() {
 			return {
-			
+				windowHeight: 580,
+				aryList:[
+					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+					{ equipmentName: '打放adsf大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+					{ equipmentName: '打asd放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+					{ equipmentName: '打dafds放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
+				]
 			}
 		},
-		onLoad() {
-		
+		created() {
+			const that = this
+			uni.getSystemInfo({
+				success(res) {
+					that.windowHeight = res.windowHeight - 100
+				}
+			})
 		},
 		methods: {
 			openPopUpBluetooth(){
-				uni.$emit('openPopUpBluetooth')
+				const that = this
+				that.$refs.popup.open()  
 			},
 			openBlue(){
 				uni.navigateTo({
@@ -54,5 +80,8 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+	}
+	.allSty{
+		width: 300px;
 	}
 </style>
