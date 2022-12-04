@@ -24,10 +24,10 @@ export default{
 		var hexArr = Array.prototype.map.call(
 			new Uint8Array(buffer),
 			function(bit) {
-				return ('00' + bit.toString(16)).slice(-2)
+				return ('00' + bit.toString(16)).slice(-2);
 			}
 		)
-		var strBuffer = this.hexCharCodeToStr(hexArr.join(''))
+		var strBuffer = this.hexCharCodeToStr(hexArr.join(''));
 		return strBuffer;
 		// return hexArr.join('');
 	},
@@ -43,7 +43,7 @@ export default{
 			return new ArrayBuffer(0);
 		}
 	    var buffer = new ArrayBuffer(str.length);
-	    // let dataView = new DataView(buffer)
+	    // let dataView = new DataView(buffer);
 	    var bufView = new Uint8Array(buffer);
 	    for (var i = 0, strLen = str.length; i < strLen; i++) {
 	    	bufView[i] = str.charCodeAt(i);
@@ -54,7 +54,10 @@ export default{
 	// 向低功耗蓝牙设备特征值中写入二进制数据。
 	// 注意：必须设备的特征值支持 write 才可以成功调用。
 	bleWriteBLECharacteristicValue(str) {
-		let buffer = this.str2ab('JOY:' + str)
+		if(!str){
+			return
+		}
+		let buffer = this.str2ab(str);
 		console.warn(buffer)
 		// 通过 tool.js 方法将字符串转ArrayBuffer
 		uni.writeBLECharacteristicValue({
@@ -64,7 +67,6 @@ export default{
 			value: buffer,
 			// writeType: 'write',
 			success(res) {
-				console.log(commonVariable.characteristicId)
 			    uni.showToast({
 					icon: 'none',
 					title: '写入成功'
@@ -76,8 +78,24 @@ export default{
 		})
 	},
 	
-	//转换设备上报的数据命令，并写入到公共参数里面
+	dataConversion(str){
+		let that = this
+		if(!str){
+			return
+		}
+		let start = str.substring(0,3);
+		let end = str.substring(str.length-2,str.length);
+		if('JOY' == start && 'DA' == end){
+			that.equipmentDataTran(str);
+		}
+	},
+	
+	/**
+	 * 转换设备上报的数据命令，并写入到公共参数里面
+	 * @param {allPageRefresh} 数据每次改变统一刷新所有页面
+	 */
 	equipmentDataTran(str){
+		let that = this
 		if(!str) return;
 		// JOY:BA:380 PVSEL LDOFF IROFF M1:OFF MU:002 T1:30.3 T2:31.2 IL:019 NM:000 DA
 		let newStr = str.substring(4,str.length-3);
@@ -88,18 +106,58 @@ export default{
 			var ary = item.split(":")
 			if(ary[1]){
 				if("BA" == ary[0]){
-					aryObj[ary[0]] = (Number(ary[1])/10).toFixed(1)
+					aryObj[ary[0]] = (Number(ary[1])/10).toFixed(1);
 				} else {
-					aryObj[ary[0]] = ary[1]
+					aryObj[ary[0]] = ary[1];
 				}
 			}else{
 				if(flagAry.indexOf(ary[0]) < 0){
-					aryObj[ary[0].substring(0,2)] = ary[0].substring(2,ary[0].length)
+					aryObj[ary[0].substring(0,2)] = ary[0].substring(2,ary[0].length);
 				} else {
-					aryObj["joyState"] = ary[0]
+					aryObj["joyState"] = ary[0];
 				}
 			}
 		});
-		commonVariable.equipmentData = aryObj
+		commonVariable.equipmentData = Object.assign(commonVariable.equipmentData,aryObj);
+		uni.$emit('allPageRefresh'); //页面刷新
+	},
+	
+	/**
+	 * 缓存蓝牙设备
+	 * @param {blueTooth} 蓝牙数据缓存Key
+	 */
+	setStorageFun(){
+		let that = this
+		let key = 'blueTooth';
+		let obj = {
+			 equipmentName: commonVariable.equipmentName, 
+			 deviceId: commonVariable.deviceId, 
+			 sn: commonVariable.equipmentData['SN']
+		};
+		let ary = [obj];
+		uni.getStorage({
+			key: key,
+			success(res) {
+				// res.data.forEach( (v,i) => {
+					
+				// })
+				console.log(res.data);
+			},
+			fail(refs){
+				that.setStorage(key,ary);
+			}
+		});
+		// uni.setStorage('storage_key', 'hello');
+		// uni.getStorage('storage_key') 
+	},
+	
+	setStorage(key,obj){
+		uni.setStorage({
+			key: key,
+			data: JSON.stringify(obj),
+			success: function () {
+				console.log('success');
+			}
+		});
 	}
 }

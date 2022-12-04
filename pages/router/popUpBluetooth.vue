@@ -1,20 +1,21 @@
 <template>
-	<view class="">
-		<view class="overFlow" :style="{height: windowHeight+'px'}">
+	<view :key="'popUpBluetooth' + numPage" class="allpopUpBluetooth">
+		<scroll-view scroll-y="true" :style="{height: windowHeight+'px'}">
 			<view v-for="(item,index) in aryList"  :key="index+1" class="flexView" >
 				<view class="information">
 					<view class="fontTits">{{item.equipmentName}}</view>
-					<view class="fontTit">{{item.xxx}}</view>
+					<view class="fontTit">{{item.sn}}</view>
 					<view class="fontTit">{{item.deviceId}}</view>
 				</view>
 				<view class="rightBut">
-					<button class="mini-btn" type="primary" size="mini" @click="createBLEConnection(item.name,item.deviceId)">配对</button>
+					<button v-if="item.deviceId == domain.deviceId" class="mini-btn" size="mini" disabled>已连接</button>
+					<button v-else class="mini-btn" type="primary" size="mini" @click="createBLEConnection(item.name,item.deviceId)">连接</button>
 				</view>
 			</view>
-		</view>
+		</scroll-view>
 		<view class="kong">
 			<view>
-				<button class="mini-btn" type="primary" size="mini">清空</button>
+				<button class="mini-btn" type="primary" size="mini" @click="clickStorage">清空</button>
 			</view>
 		</view>
 	</view>
@@ -22,47 +23,74 @@
 
 <script>
 	export default {
-		props:{
-			windowHeight: {
-				type: Number,
-				default: 400
-			},
-		},
 	    data () {
 	        return {
-				aryList:[
-					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-					{ equipmentName: '打放adsf大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-					{ equipmentName: '打asd放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-					{ equipmentName: '打dafds放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-					{ equipmentName: '打放大', deviceId: '2D:DA:DA:VE:CD:CD:ER', xxx: 'vodik' },
-				]
+				numPage: 0,
+				windowHeight: 400,
+				aryList:[]
 	        }
 	    },
 	    created () {
+			const that = this
 			
+			//获取设备高度
+			uni.getSystemInfo({
+				success(res) {
+					that.windowHeight = res.windowHeight - 100;
+				}
+			})
+			
+			/**
+			 * 获取缓存的蓝牙数据
+			 * @param {blueTooth} 蓝牙数据缓存Key
+			 */
+			uni.getStorage({
+				key: 'blueTooth',
+				success(res) {
+					if(res.data && res.data.length > 0 ){
+						that.aryList = res.data;
+					}
+				},
+			
+			});
 	    },
 		mounted(){
+			const that = this
 			
+			/**
+			 * tool方法equipmentDataTran穿参刷新
+			 * @param {allPageRefresh} 数据每次改变统一刷新所有页面
+			 */
+			uni.$on('allPageRefresh',() =>{
+				that.numPage += 1;
+			})
 		},
 		methods: {
-			confirmShare(){
-				const that = this
-				that.$refs.popup.open()  
+			// 清空本地缓存 异步
+			clickStorage(){
+				let that = this
+				that.aryList = [];
+				uni.clearStorage();
 			},
 			createBLEConnection(name, deviceId){
 				
 			}
+			
 		}
 	}
 </script>
 
 <style lang="scss">
+	.allpopUpBluetooth{
+		uni-button{
+			height: 30px;
+			width: 80px;
+		}
+		uni-button[disabled]{
+			background-color: #778899;
+			color: #FFFFFF;
+		}
+	}
 	.overFlow{
 		overflow: auto;
 	}
@@ -82,8 +110,5 @@
 		align-items: center;
 		justify-content: flex-end;
 		padding-right: 20px;
-		uni-button{
-			height: 30px;
-		}
 	}
 </style>

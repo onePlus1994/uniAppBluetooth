@@ -17,7 +17,7 @@
 		<view>
 			<uni-popup ref="popup" background-color="#fff" type="left">
 				<view class="allSty">
-					<popUpBluetooth :windowHeight="windowHeight"></popUpBluetooth>
+					<popUpBluetooth></popUpBluetooth>
 				</view>
 			</uni-popup>
 		</view>
@@ -47,17 +47,12 @@
 			}
 		},
 		created() {
-			const that = this
-			uni.getSystemInfo({
-				success(res) {
-					that.windowHeight = res.windowHeight - 100
-				}
-			})
+			
 		},
 		methods: {
 			openPopUpBluetooth(){
 				const that = this
-				that.$refs.popup.open()  
+				that.$refs.popup.open();
 			},
 			openBlue(){
 				uni.navigateTo({

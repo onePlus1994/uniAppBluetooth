@@ -32,10 +32,10 @@
 			} 
 		},
 		created(){
-			// this.bleOpenBluetoothAdapter();
+			this.bleOpenBluetoothAdapter();
 		},
 		onLoad() {
-			uni.startPullDownRefresh()
+			// uni.startPullDownRefresh();
 		},
 		onPullDownRefresh(){
 			this.showList = [];
@@ -54,7 +54,7 @@
 			userInfo: function (e) {
 				if(e.flagRefresh){
 					this.bleOpenBluetoothAdapter();
-					this.flagRefresh = false
+					this.flagRefresh = false;
 					// 下拉刷新10S后结束刷新
 					setTimeout(function(){
 						uni.stopBluetoothDevicesDiscovery({
@@ -73,13 +73,13 @@
 					// mode: 'cnetral',// 模式为 cnetral ，此处可不填写
 					success(res) {
 						// 蓝牙正常打开，开始搜索蓝牙设备
-						that.bleStartBluetoothDevicesDiscovery()
+						that.bleStartBluetoothDevicesDiscovery();
 					},
 					fail(res) {
 						// 已经初始化过的情况，需要从 fail 单独处理为 success
 						if (res.errMsg == 'openBluetoothAdapter:fail already opened') {
 							// 蓝牙正常打开，开始搜索蓝牙设备
-							that.bleStartBluetoothDevicesDiscovery()
+							that.bleStartBluetoothDevicesDiscovery();
 						} else {
 							// 错误情况，弹出提示
 							uni.showToast({
@@ -90,7 +90,7 @@
 					},
 					complete(res) {
 						// 不论成功与否，暂停下拉刷新效果
-						uni.stopPullDownRefresh()
+						uni.stopPullDownRefresh();
 					}
 				})
 			},
@@ -104,12 +104,12 @@
 					allowDuplicatesKey: false,//是否允许重复上报同一设备。
 					success(res) {
 						// 开启搜索成功后，监听寻找到新设备的事件
-						that.bleOnBluetoothDeviceFound()
+						that.bleOnBluetoothDeviceFound();
 					},
 					fail(res) {
 						// 如果已经开启搜索未关闭，同样 监听寻找到新设备的事件
 						if (res.errMsg == 'startBluetoothDevicesDiscovery:fail already discovering devices') {
-							that.bleOnBluetoothDeviceFound()
+							that.bleOnBluetoothDeviceFound();
 						} else {
 							// 错误提示
 							uni.showToast({
@@ -125,33 +125,33 @@
 			bleOnBluetoothDeviceFound: function() {
 				let that = this
 				uni.onBluetoothDeviceFound(function(obj) {
-					let list = obj.devices
+					let list = obj.devices;
 					for (let i = 0; i < list.length; i++) {
 						// 添加（过滤重复数据）
-						that.belDeviceAdd(list[i])
+						that.belDeviceAdd(list[i]);
 					}
 					// 列表数据整理（条件筛选）
-					that.dataRegularization()
+					that.dataRegularization();
 				})
 			},
 
 			// 设备加入，过滤已添加设备
 			belDeviceAdd: function(dev) {
 				// 遍历确认是否存在设备
-				let selectIdx = -1
+				let selectIdx = -1;
 				for (let i = 0; i < this.showList.length; i++) {
 					let item = this.showList[i]
 					if (item.deviceId == dev.deviceId) {
-						selectIdx = i
+						selectIdx = i;
 						break
 					}
 				}
 				if (selectIdx == -1) {
 					// 不存在则追加
-					this.showList.push(dev)
+					this.showList.push(dev);
 				} else {
 					// 存在则替换
-					this.showList[selectIdx] = dev
+					this.showList[selectIdx] = dev;
 				}
 			},
   
@@ -179,7 +179,7 @@
 						list.push(itemObj)
 					} 
 				}
-				that.showList = list
+				that.showList = list;
 			},
 			
 			// 创建链接
@@ -188,8 +188,8 @@
 			  uni.createBLEConnection({
 			    deviceId: devId,
 			    success(res) {
-					that.domain.deviceId = devId
-					that.domain.equipmentName = name
+					that.domain.deviceId = devId;
+					that.domain.equipmentName = name;
 					// 配置连接成功后，是否自动断开搜索
 					if (that.domain.connectAutoStop) {
 						uni.stopBluetoothDevicesDiscovery({ 
@@ -215,21 +215,26 @@
 												deviceId: that.domain.deviceId,
 												serviceId: that.domain.serviceId,
 												success(res) {
-													var flag = true
-													var list = res.characteristics
+													var flag = true;
+													var list = res.characteristics;
 													res.characteristics.forEach(item =>{
 														if(item.properties.read && item.properties.write && flag){
-															that.domain.characteristicId = item.uuid
-															flag = false
+															that.domain.characteristicId = item.uuid;
+															flag = false;
 														}
 														if(item.properties.notify){
-															that.domain.characteristicWatchId = item.uuid
+															that.domain.characteristicWatchId = item.uuid;
 														}
 													})
+													that.publicTools.bleWriteBLECharacteristicValue('JOY:VERDA');
+													
+													setTimeout(function(){
+														that.publicTools.setStorageFun();
+													},200)
 													that.belNotifyBLECharacteristicValueChange();
 												},
 												fail:(res)=>{
-													console.log(res)
+													console.log(res);
 												}
 											})
 										}, 300) // 此步骤很重要，通过每个延迟发送请求来避免同时发送请求出现的bug
@@ -240,7 +245,7 @@
 					},1000)
 			    },
 				fail(ress){
-					console.log(JSON.stringify(ress))
+					console.log(JSON.stringify(ress));
 				}
 			  })
 			},
@@ -260,17 +265,17 @@
 						uni.onBLECharacteristicValueChange(function(res1){
 							let readText = that.publicTools.ab2hex(res1.value)
 							if(that.flagSub == "DA"){
-								that.datastr = ""
-								that.datastr += readText
+								that.datastr = "";
+								that.datastr += readText;
 							} else {
-								that.datastr += readText
+								that.datastr += readText;
 							}
-							that.flagSub = that.datastr.substring(that.datastr.length - 2)
-							console.warn(JSON.stringify(that.datastr))
+							that.flagSub = that.datastr.substring(that.datastr.length - 2);
+							that.publicTools.dataConversion(that.datastr);
+							console.warn(JSON.stringify(that.datastr));
 						})
 					},
 					fail: (res) => {
-						console.log('启用 notify 功能失败', res)
 						uni.showToast({
 							icon:'none',
 							title:'设备暂不支持接收数据',

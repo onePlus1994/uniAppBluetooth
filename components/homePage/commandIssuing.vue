@@ -74,30 +74,30 @@
 	        }
 	    },
 	    created () {
-	       this.flagHostLPar = this.hostLAry[0].flagPar
-		   this.flagTitPar = this.titAry[0].flagPar
+	       this.flagHostLPar = this.hostLAry[0].flagPar;
+		   this.flagTitPar = this.titAry[0].flagPar;
 	    },
 		methods: {
 			// 头部按钮切换
 			flagTitAry(index, flagPar){
-				this.flagTitClass = index
-				this.flagTitPar = flagPar
+				this.flagTitClass = index;
+				this.flagTitPar = flagPar;
 				
 				// 按钮复位
-				this.motorBut = 0
-				this.lightBut = 0
+				this.motorBut = 0;
+				this.lightBut = 0;
 			},
 			flagHostLAry(index, flagPar){
-				this.flagHostLClass = index
-				this.flagHostLPar = flagPar
+				this.flagHostLClass = index;
+				this.flagHostLPar = flagPar;
 			},
 			// 马达模式按钮
 			motorClick(index){
-				this.motorBut = index
+				this.motorBut = index;
 			},
 			// 灯光模式
 			lightClick(index){
-				this.lightBut = index
+				this.lightBut = index;
 			}
 		}
 	}

@@ -26,7 +26,7 @@
 				"navigationBarTitleText": "添加设备",
 				"app-plus": {
 					// "titleNView": false,
-					// "enablePullDownRefresh": true
+					"enablePullDownRefresh": true
 				}
 			}
 		}

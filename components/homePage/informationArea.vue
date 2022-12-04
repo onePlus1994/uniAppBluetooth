@@ -1,6 +1,6 @@
 <template>
 	<!-- 信息区域 -->
-	<view class="allSt" :key="numPage">
+	<view class="allSt" :key="'informationArea' + numPage">
 		<view class="inforClass">
 			<text v-for="(item,index) in tetList" :key="index" style="width: 50%;" :class="index%2==0?'':'textR'">
 				{{item.name}}: {{ initialization(item.id) }}
@@ -17,13 +17,13 @@
 		<!-- 版本信息 -->
 		<view>
 			<view class="editionSty">
-				<text class="editionTex othrText">硬件版本: 1.05A</text>
-				<text class="editionTex othrText">软件版本: 2.02A</text>
+				<text class="editionTex othrText">{{ edition[0].name }}: {{ initialization(edition[0].id) }}</text>
+				<text class="editionTex othrText">{{ edition[1].name }}: {{ initialization(edition[1].id) }}</text>
 				<button class="mini-btn firmwareBut otBuS" type="default" size="mini">升级固件</button>
 			</view>
 			<view class="editionSty editionCen ">
-				<text class="editionTex othrTex">序列号: A2112-0003</text>
-				<text class="editionTex">时间: 20220216</text>
+				<text class="editionTex othrTex">{{ edition[2].name }}: {{ initialization(edition[2].id) }}</text>
+				<text class="editionTex">{{ edition[3].name }}: {{ initialization(edition[3].id) }}</text>
 			</view>
 			<view class="editionSty">
 				<button class="mini-btn firmwareBut" type="primary" size="mini">烧写序列号</button>
@@ -51,35 +51,49 @@
 					{ name: "短按K3", val: "" },
 					{ name: "长按K3", val: "" },
 				],
+				edition:[
+					{ name: "硬件版本", id: "HW" },
+					{ name: "软件版本", id: "SW" },
+					{ name: "序列号", id: "SN" },
+					{ name: "时间", id: "TIME" },
+				],
 				flagStartStop: true
 	        }
 	    },
 	    created () {
-	       // this.initialization()
+	       // this.initialization();
 	    },
+		onLoad() {
+			
+		},
 		mounted(){
 			const that = this
-			uni.$on("globalData",function(i){
-				that.numPage += 1
+			
+			/**
+			 * tool方法equipmentDataTran穿参刷新
+			 * @param {allPageRefresh} 数据每次改变统一刷新所有页面
+			 */
+			uni.$on('allPageRefresh',() =>{
+				that.numPage += 1;
 			})
 		},
 		methods: {
 			initialization(str){
-				let that = this
-				let flagStr = that.domain.equipmentData[str]
+				let that = this;
+				let flagStr = that.domain.equipmentData[str];
 				if(!flagStr || flagStr == "OFF") return "--";
 				if( str == "T1" || str == "T2" ){
-					return flagStr + "℃"
+					return flagStr + "℃";
 				} else if( str == "BA" ){
-					return flagStr + "V"
+					return flagStr + "V";
 				} else {
-					return flagStr
+					return flagStr || "";
 				}
 			},
 			// 启停按钮
 			radiuBut(){
 				let that = this
-				that.flagStartStop = !that.flagStartStop
+				that.flagStartStop = !that.flagStartStop;
 			}
 		}
 	}

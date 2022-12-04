@@ -17,12 +17,13 @@
 	import homePage from '../../components/homePage/homePage.vue';
 	import commandIssuing from '../../components/homePage/commandIssuing.vue';
 	import informationArea from '../../components/homePage/informationArea.vue';
+	
 	export default {
 		components:{
 			homeHeader,
 			homePage,
 			commandIssuing,
-			informationArea,
+			informationArea
 		},
 		data() {
 			return {
