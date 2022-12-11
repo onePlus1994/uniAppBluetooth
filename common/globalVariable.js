@@ -1,6 +1,5 @@
 // 全局变量
 export default{
-	permanentlySaved: false, // 判断是否永久保存连击数据
 	connectAutoStop: true, // 蓝牙配置链接成功后是否断开蓝牙搜寻
 	equipmentName: "", // 蓝牙设备链接名称
 	deviceId: "", // 蓝牙设备deviceId

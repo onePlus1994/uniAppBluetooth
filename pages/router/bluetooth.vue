@@ -1,17 +1,38 @@
 <template>
 	<view >
 		<publicHeader :title="title"></publicHeader>
-		<view v-for="item in showList" class="titleClass countMain">
-			<view class="titleIcon">
-				<uni-icons custom-prefix="iconfont" type="icon-lanya" size="30"></uni-icons>
+		<view :key="pageNum">
+			<view v-for="(item,index) in showList" class="titleClass countMain" :key="'showList'+index">
+				<view class="titleIcon">
+					<uni-icons custom-prefix="iconfont" type="icon-lanya" size="30"></uni-icons>
+				</view>
+				<view class="information">
+					<view class="fontTit">{{item.name}}</view>
+					<view class="fontSub">{{item.deviceId}}</view>
+				</view>
+				<view class="rightBut">
+					<button class="mini-btn" type="primary" size="mini" @click="createBLEConnection(item.name,item.deviceId)">配对</button>
+				</view>
 			</view>
-			<view class="information">
-				<view class="fontTit">{{item.name}}</view>
-				<view class="fontSub">{{item.deviceId}}</view>
-			</view>
-			<view class="rightBut">
-				<button class="mini-btn" type="primary" size="mini" @click="createBLEConnection(item.name,item.deviceId)">配对</button>
-			</view>
+		</view>
+		<view>
+			<uni-popup ref="share" type="share" safeArea backgroundColor="#fff">
+				<view class="shareClass" :key="pageNum"> 
+					<view class="title"> 配对成功 </view>
+					<view class="shareMain">
+						<view > 设备名称： {{ domain.equipmentName }}</view>
+						<view > 设备地址： {{ domain.deviceId }}</view>
+						<view > 序列号： {{ domain.equipmentData['SN'] }}</view>
+					</view>
+					<view class="shareFoot">
+						<view > 是否要保存此设备到本地？</view>
+						<view class="shareBut">
+							<button type="default" size="mini" @click="cancelBluePop">取消</button>
+							<button type="primary" size="mini" @click="preservationBulPop">保存</button>
+						</view>
+					</view>
+				</view>
+			</uni-popup>
 		</view>
 	</view>
 </template>
@@ -24,11 +45,12 @@
 		},
 		data() {
 			return {
+				pageNum: 0,
 				title: "添加设备",
 				showList: [], //搜寻到的数据
 				datastr: "",
 				flagSub: "",
-				flagRefresh: false
+				flagRefresh: false,
 			} 
 		},
 		created(){
@@ -66,6 +88,20 @@
 			},
 		},
 		methods: {
+			// 保存按钮
+			preservationBulPop(){
+				const that = this
+				that.publicTools.setStorageFun(); //永久保存数据
+				this.cancelBluePop();
+			},
+			// 取消按钮
+			cancelBluePop(){
+				this.$refs.share.close()
+				uni.$emit('homepageControl', false)
+				uni.navigateBack({
+					delta: 1
+				});
+			},
 			// 初始化蓝牙
 			bleOpenBluetoothAdapter: function() {
 				let that = this
@@ -94,9 +130,8 @@
 					}
 				})
 			},
-			
 			// 开始搜寻附近的蓝牙外围设备
-			bleStartBluetoothDevicesDiscovery: function() {
+			bleStartBluetoothDevicesDiscovery() {
 				let that = this
 				uni.startBluetoothDevicesDiscovery({
 					// services: ['FEE7'],  增加条件
@@ -120,9 +155,9 @@
 					}
 				})
 			},
-
+			
 			// 监听寻找到新设备的事件
-			bleOnBluetoothDeviceFound: function() {
+			bleOnBluetoothDeviceFound() {
 				let that = this
 				uni.onBluetoothDeviceFound(function(obj) {
 					let list = obj.devices;
@@ -134,13 +169,14 @@
 					that.dataRegularization();
 				})
 			},
-
+			
 			// 设备加入，过滤已添加设备
-			belDeviceAdd: function(dev) {
+			belDeviceAdd(dev) {
+				let that = this
 				// 遍历确认是否存在设备
 				let selectIdx = -1;
-				for (let i = 0; i < this.showList.length; i++) {
-					let item = this.showList[i]
+				for (let i = 0; i < that.showList.length; i++) {
+					let item = that.showList[i]
 					if (item.deviceId == dev.deviceId) {
 						selectIdx = i;
 						break
@@ -148,15 +184,15 @@
 				}
 				if (selectIdx == -1) {
 					// 不存在则追加
-					this.showList.push(dev);
+					that.showList.push(dev);
 				} else {
 					// 存在则替换
-					this.showList[selectIdx] = dev;
+					that.showList[selectIdx] = dev;
 				}
 			},
-  
+			  
 			// 数据整理 
-			dataRegularization: function() {
+			dataRegularization() {
 				var that = this;
 				let list = [];
 				for (let i = 0; i < that.showList.length; i++) {
@@ -173,7 +209,7 @@
 					// 过滤器 - 名称
 					// if (this.FilterName.length > 0 && (!name || name.indexOf(this.FilterName)) < 0) add = false
 					// 过滤器 - UUID	
-					if (itemObj.advertisServiceUUIDs.length == 0) add = false;
+					// if (itemObj.advertisServiceUUIDs.length == 0) add = false;
 					// 满足条件，添加仅 list
 					if (add){
 						list.push(itemObj)
@@ -183,7 +219,7 @@
 			},
 			
 			// 创建链接
-			createBLEConnection: function(name,devId) {
+			createBLEConnection(name,devId) {
 			  let that = this
 			  uni.createBLEConnection({
 			    deviceId: devId,
@@ -226,11 +262,16 @@
 															that.domain.characteristicWatchId = item.uuid;
 														}
 													})
-													that.publicTools.bleWriteBLECharacteristicValue('JOY:VERDA');
-													
+													// 获取初始化数据
+													that.publicTools.bleWriteBLECharacteristicValue('VER');
 													setTimeout(function(){
-														that.publicTools.setStorageFun();
-													},200)
+														that.publicTools.bleWriteBLECharacteristicValue('VTP');
+													},300)
+													setTimeout(function(){
+														// 页面蓝牙连接弹出框
+														that.$refs.share.open('center')
+														that.pageNum += 1
+													},500)
 													that.belNotifyBLECharacteristicValueChange();
 												},
 												fail:(res)=>{
@@ -253,7 +294,7 @@
 			// 启用低功耗蓝牙设备特征值变化时的 notify 功能，订阅特征值。
 			// 注意：必须设备的特征值支持 notify 或者 indicate 才可以成功调用。 
 			// 另外，必须先启用 notifyBLECharacteristicValueChange 才能监听到设备 characteristicValueChange 事件 
-			belNotifyBLECharacteristicValueChange:function() {
+			belNotifyBLECharacteristicValueChange() {
 				let that = this
 				uni.notifyBLECharacteristicValueChange({
 					deviceId: that.domain.deviceId,
@@ -271,8 +312,7 @@
 								that.datastr += readText;
 							}
 							that.flagSub = that.datastr.substring(that.datastr.length - 2);
-							that.publicTools.dataConversion(that.datastr);
-							console.warn(JSON.stringify(that.datastr));
+							that.publicTools.dataConversion(that.datastr)
 						})
 					},
 					fail: (res) => {
@@ -304,5 +344,28 @@
 	.rightBut{
 		width: 100px;
 		padding: 10px 20px;
+	}
+	.shareClass{
+		width: 300px;
+		height: 250px;
+		.title{
+			width: 100%;
+			line-height: 40px;
+			text-align: center;
+			border-bottom: 1px solid #ebeef5;
+		}
+		.shareMain{
+			display: flex;
+			flex-direction: column;
+			line-height: 30px;
+			padding: 10px;
+		}
+		.shareFoot{
+			padding: 0 10px;
+			.shareBut{
+				display: flex;
+				padding: 20px 0px;
+			}
+		}
 	}
 </style>

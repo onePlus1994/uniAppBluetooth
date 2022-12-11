@@ -27,7 +27,11 @@
 	        return {
 				numPage: 0,
 				windowHeight: 400,
-				aryList:[]
+				aryList:[],
+				connectData:{
+					name: "",
+					deviceId: ""
+				}
 	        }
 	    },
 	    created () {
@@ -73,7 +77,8 @@
 				uni.clearStorage();
 			},
 			createBLEConnection(name, deviceId){
-				
+				let that = this
+			
 			}
 			
 		}

@@ -57,8 +57,7 @@ export default{
 		if(!str){
 			return
 		}
-		let buffer = this.str2ab(str);
-		console.warn(buffer)
+		let buffer = this.str2ab('JOY:' + str + 'DA');
 		// 通过 tool.js 方法将字符串转ArrayBuffer
 		uni.writeBLECharacteristicValue({
 			deviceId: commonVariable.deviceId,
@@ -67,10 +66,10 @@ export default{
 			value: buffer,
 			// writeType: 'write',
 			success(res) {
-			    uni.showToast({
-					icon: 'none',
-					title: '写入成功'
-				})
+			 //    uni.showToast({
+				// 	icon: 'none',
+				// 	title: '写入成功'
+				// })
 			},
 			fail(){
 	
@@ -138,9 +137,6 @@ export default{
 		uni.getStorage({
 			key: key,
 			success(res) {
-				// res.data.forEach( (v,i) => {
-					
-				// })
 				console.log(res.data);
 			},
 			fail(refs){
@@ -159,5 +155,7 @@ export default{
 				console.log('success');
 			}
 		});
-	}
+	},
+	
+	
 }

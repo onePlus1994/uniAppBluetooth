@@ -12,7 +12,7 @@
 			</view>
 		</view>
 		<view class="cliBut">
-			<button class="mini-btn cliButSty" type="primary" size="mini" v-for="item in clickBut">{{ item.name }}</button>
+			<button class="mini-btn cliButSty" type="primary" size="mini" v-for="item in clickBut" @click="downInstructions(item.val)">{{ item.name }}</button>
 		</view>
 		<!-- 版本信息 -->
 		<view>
@@ -44,18 +44,18 @@
 					// { name: "电池电压", id: "BA" }
 				],
 				clickBut:[
-					{ name: "短按K1", val: "" },
-					{ name: "长按K1", val: "" },
-					{ name: "短按K2", val: "" },
-					{ name: "长按K2", val: "" },
-					{ name: "短按K3", val: "" },
-					{ name: "长按K3", val: "" },
+					{ name: "短按K1", val: "KS1" },
+					{ name: "长按K1", val: "KL1" },
+					{ name: "短按K2", val: "KS2" },
+					{ name: "长按K2", val: "KL2" },
+					{ name: "短按K3", val: "KS3" },
+					{ name: "长按K3", val: "KL3" }
 				],
 				edition:[
 					{ name: "硬件版本", id: "HW" },
 					{ name: "软件版本", id: "SW" },
 					{ name: "序列号", id: "SN" },
-					{ name: "时间", id: "TIME" },
+					{ name: "时间", id: "TIME" }
 				],
 				flagStartStop: true
 	        }
@@ -94,6 +94,10 @@
 			radiuBut(){
 				let that = this
 				that.flagStartStop = !that.flagStartStop;
+			},
+			downInstructions(val){
+				let that = this
+				that.publicTools.bleWriteBLECharacteristicValue(val);
 			}
 		}
 	}
